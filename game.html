@@ -1,0 +1,124 @@
+<html>
+<header>
+    <meta charset='utf-8'>
+    <style>
+        div {
+            text-align:center;
+        }
+        img {
+            width:150px;
+            height: 120px;
+        }
+    </style>
+</header>
+
+<body>
+    <div>
+        <h3>誰先嬴10次誰就贏</h3>
+        <h3 id='playerCntHint'></h3>
+        <h3 id='pcCntHint'></h3>
+        <button onclick="game('scssiors')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbORe-Nd1LgRdBvLzUQwxcidJY3M45hHLvLUGJzY5rBtWFaF7x"></button>
+        <button onclick="game('stone')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1kB9WWwchSTAiNNPVILKDTaqfWjRaJTBzisaBEngNn1zOFWaj"></button>
+        <button onclick="game('paper')"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUJc4bYq7zk84bQ3lsc9ZZNd6Tqh5vmY-J8OJYQXVS8Vb4cYST"></button>
+        <br/>
+        <div id='ourHit'></div>
+        V.S.<br/>
+        <div id='pcHit'></div>
+        <p id='showTwoChoose'></p>
+    </div>
+
+    <script>
+        let playerWinCount = 0
+        let pcWinCount = 0
+        let gameLimit = 3 //10
+        
+        function game(hit){
+            console.log('Your choose '+hit)
+            let randomNumber = Math.random()
+            let pcChoose = ''
+            let res = ''
+
+            // show choose use by image
+            if(hit=='scssiors'){
+                document.getElementById('ourHit').innerHTML='<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbORe-Nd1LgRdBvLzUQwxcidJY3M45hHLvLUGJzY5rBtWFaF7x">'
+            }else if(hit=='stone'){
+                document.getElementById('ourHit').innerHTML='<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1kB9WWwchSTAiNNPVILKDTaqfWjRaJTBzisaBEngNn1zOFWaj">'
+            }else{
+                document.getElementById('ourHit').innerHTML='<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUJc4bYq7zk84bQ3lsc9ZZNd6Tqh5vmY-J8OJYQXVS8Vb4cYST">'
+            }
+
+            // [法一]如實將9種結果寫出並比較，缺點是要寫9次
+            // if(pcChoose=='' && hit==''){            }
+            if(randomNumber<1/3){
+                // console.log('電腦:scssiors',)
+                pcChoose = 'scssiors'
+                document.getElementById('pcHit').innerHTML='<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRbORe-Nd1LgRdBvLzUQwxcidJY3M45hHLvLUGJzY5rBtWFaF7x">'
+                if(hit=='scssiors'){
+                    res = '平手'
+                }else if(hit=='stone'){
+                    playerWinCount = playerWinCount + 1
+                    res = '玩家贏'
+                }else if(hit='paper'){
+                    pcWinCount = pcWinCount + 1
+                    res = '玩家輸'
+                }
+            } else if (randomNumber<2/3){
+                //console.log('電腦:stone')
+                pcChoose = 'stone'
+                document.getElementById('pcHit').innerHTML='<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1kB9WWwchSTAiNNPVILKDTaqfWjRaJTBzisaBEngNn1zOFWaj">'
+                if(hit=='scssiors'){
+                    pcWinCount = pcWinCount + 1
+                    res = '玩家輸'
+                }else if(hit=='stone'){
+                    res = '平手'
+                }else if(hit='paper'){
+                    playerWinCount = playerWinCount + 1
+                    res = '玩家贏'
+                }
+            } else {
+                //console.log('電腦:paper')
+                pcChoose = 'paper'
+                document.getElementById('pcHit').innerHTML='<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUJc4bYq7zk84bQ3lsc9ZZNd6Tqh5vmY-J8OJYQXVS8Vb4cYST">'
+                if(hit=='scssiors'){
+                    playerWinCount = playerWinCount + 1
+                    res = '玩家贏'
+                }else if(hit=='stone'){
+                    pcWinCount = pcWinCount + 1
+                    res = '玩家輸'
+                }else if(hit='paper'){
+                    res = '平手'
+                }
+            }
+            
+            document.getElementById('showTwoChoose').innerHTML='電腦出的是'+pcChoose+', 您出的是'+hit+','+res
+            document.getElementById('playerCntHint').innerHTML='您贏的次數是'+playerWinCount
+            document.getElementById('pcCntHint').innerHTML='電腦贏的次數是'+pcWinCount
+
+            // compare 2 choose
+            if (playerWinCount==gameLimit ||  pcWinCount==gameLimit){
+                if (playerWinCount==gameLimit){
+                    setTimeout(function(){
+                        alert('Game Over, your score:'+playerWinCount+', pc score:'+pcWinCount+'\n玩家贏了！')
+                    },100)
+                }
+                if (pcWinCount==gameLimit){
+                    setTimeout(function(){
+                        alert('Game Over, your score:'+playerWinCount+', pc score:'+pcWinCount+'\n電腦贏了！')
+                    },100)
+                }
+
+                setTimeout(function(){
+                    playerWinCount = 0
+                    pcWinCount = 0
+                    document.getElementById('playerCntHint').innerHTML='您贏的次數是'+playerWinCount
+                    document.getElementById('pcCntHint').innerHTML='電腦贏的次數是'+pcWinCount
+                },100)
+
+            }
+
+
+        }
+    </script>
+</body>
+
+</html>
